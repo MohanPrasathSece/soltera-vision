@@ -10,8 +10,7 @@ export function Hero() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)")
-      .matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduced) setMounted(true);
   }, []);
 
@@ -72,8 +71,8 @@ export function Hero() {
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 1.15 }}
             className="mt-8 max-w-md text-lg leading-relaxed text-muted-foreground"
           >
-            Soltera manages diversified crypto investment funds and blockchain
-            ventures for accredited investors and institutions.
+            Soltera manages diversified crypto investment funds and blockchain ventures for
+            accredited investors and institutions.
           </motion.p>
 
           <motion.div

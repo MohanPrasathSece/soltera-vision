@@ -7,11 +7,31 @@ import { RevealText } from "./RevealText";
 gsap.registerPlugin(ScrollTrigger);
 
 const steps = [
-  { num: "01", title: "Deposit Capital", body: "Fund your allocation securely through our regulated onboarding desk." },
-  { num: "02", title: "Portfolio Allocation", body: "Capital is deployed across managed funds and blockchain ventures." },
-  { num: "03", title: "Risk Management", body: "Continuous hedging, drawdown limits, and exposure monitoring." },
-  { num: "04", title: "Monthly Growth Reports", body: "Institutional-grade statements delivered to your investor portal." },
-  { num: "05", title: "Capital Appreciation", body: "Long-term compounding across the digital asset economy." },
+  {
+    num: "01",
+    title: "Deposit Capital",
+    body: "Fund your allocation securely through our regulated onboarding desk.",
+  },
+  {
+    num: "02",
+    title: "Portfolio Allocation",
+    body: "Capital is deployed across managed funds and blockchain ventures.",
+  },
+  {
+    num: "03",
+    title: "Risk Management",
+    body: "Continuous hedging, drawdown limits, and exposure monitoring.",
+  },
+  {
+    num: "04",
+    title: "Monthly Growth Reports",
+    body: "Institutional-grade statements delivered to your investor portal.",
+  },
+  {
+    num: "05",
+    title: "Capital Appreciation",
+    body: "Long-term compounding across the digital asset economy.",
+  },
 ];
 
 function GlobalNetwork() {
@@ -24,9 +44,7 @@ function GlobalNetwork() {
     [12, 24, 36, 44, 56, 68, 76, 86],
     [16, 32, 48, 64, 82],
   ];
-  seedRows.forEach((row, r) =>
-    row.forEach((x) => dots.push([x, 18 + r * 16 + ((x * 7) % 9)])),
-  );
+  seedRows.forEach((row, r) => row.forEach((x) => dots.push([x, 18 + r * 16 + ((x * 7) % 9)])));
 
   const arcs = [
     "M 80 40 Q 250 -20 420 60",
@@ -68,14 +86,7 @@ function GlobalNetwork() {
 
       <svg viewBox="0 0 600 120" className="w-full" aria-hidden>
         {dots.map(([x, y], i) => (
-          <circle
-            key={i}
-            cx={x * 6}
-            cy={y}
-            r={1.6}
-            fill="#d8d8d8"
-            opacity={0.22}
-          />
+          <circle key={i} cx={x * 6} cy={y} r={1.6} fill="#d8d8d8" opacity={0.22} />
         ))}
         {arcs.map((d, i) => (
           <g key={i}>
@@ -166,17 +177,14 @@ export function SectionWhy() {
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
               className="mt-8 max-w-md text-lg leading-relaxed text-muted-foreground"
             >
-              A disciplined, transparent investment process — engineered for
-              institutions, refined for private investors.
+              A disciplined, transparent investment process — engineered for institutions, refined
+              for private investors.
             </motion.p>
           </div>
 
           {/* Right — timeline */}
           <div ref={trackRef} className="relative pl-10">
-            <div
-              aria-hidden
-              className="absolute left-[11px] top-2 bottom-2 w-px bg-border"
-            />
+            <div aria-hidden className="absolute left-[11px] top-2 bottom-2 w-px bg-border" />
             <div
               ref={lineRef}
               aria-hidden

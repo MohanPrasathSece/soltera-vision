@@ -66,12 +66,8 @@ function BentoCard({
           <div className="mb-6 inline-flex size-11 items-center justify-center rounded-2xl bg-paper-foreground text-paper transition-transform duration-500 group-hover:rotate-6">
             {icon}
           </div>
-          <h3 className="text-xl font-bold tracking-tight text-paper-foreground">
-            {title}
-          </h3>
-          <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-paper-muted">
-            {body}
-          </p>
+          <h3 className="text-xl font-bold tracking-tight text-paper-foreground">{title}</h3>
+          <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-paper-muted">{body}</p>
         </div>
         <div className="mt-8">{visual}</div>
       </div>
@@ -158,22 +154,24 @@ function NetworkVisual() {
   return (
     <svg viewBox="0 0 320 110" className="w-full" aria-hidden>
       {nodes.map(([x1, y1], i) =>
-        nodes.slice(i + 1, i + 3).map(([x2, y2], j) => (
-          <motion.line
-            key={`${i}-${j}`}
-            x1={x1}
-            y1={y1}
-            x2={x2}
-            y2={y2}
-            stroke="#151515"
-            strokeOpacity="0.18"
-            strokeWidth="1"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.2, delay: 0.15 * i }}
-          />
-        )),
+        nodes
+          .slice(i + 1, i + 3)
+          .map(([x2, y2], j) => (
+            <motion.line
+              key={`${i}-${j}`}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke="#151515"
+              strokeOpacity="0.18"
+              strokeWidth="1"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, delay: 0.15 * i }}
+            />
+          )),
       )}
       {nodes.map(([x, y], i) => (
         <motion.circle
@@ -212,9 +210,7 @@ function MetricsVisual() {
           className="flex items-center justify-between rounded-2xl border border-paper-border px-4 py-3"
         >
           <span className="text-[13px] text-paper-muted">{m.label}</span>
-          <span className="font-mono text-sm font-bold text-paper-foreground">
-            {m.value}
-          </span>
+          <span className="font-mono text-sm font-bold text-paper-foreground">{m.value}</span>
         </motion.div>
       ))}
     </div>
@@ -243,9 +239,8 @@ export function SectionWealth() {
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
             className="mt-8 max-w-lg text-lg leading-relaxed text-paper-muted"
           >
-            We allocate capital across the highest-conviction sectors of the
-            digital economy — managed with the discipline of traditional
-            institutional finance.
+            We allocate capital across the highest-conviction sectors of the digital economy —
+            managed with the discipline of traditional institutional finance.
           </motion.p>
         </div>
 

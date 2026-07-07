@@ -8,12 +8,7 @@ interface RevealTextProps {
 }
 
 /** Word-staggered blur/fade/slide reveal for headlines. */
-export function RevealText({
-  text,
-  className,
-  as = "span",
-  delay = 0,
-}: RevealTextProps) {
+export function RevealText({ text, className, as = "span", delay = 0 }: RevealTextProps) {
   const Tag = motion[as];
   const words = text.split(" ");
 

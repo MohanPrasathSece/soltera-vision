@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { SmoothScroll } from "@/components/landing/SmoothScroll";
 import { CustomCursor } from "@/components/landing/CustomCursor";
 import { ScrollProgress } from "@/components/landing/ScrollProgress";
@@ -9,11 +8,7 @@ import { SectionWhy } from "@/components/landing/SectionWhy";
 import { ContactSection } from "@/components/landing/ContactSection";
 import { Footer } from "@/components/landing/Footer";
 
-export const Route = createFileRoute("/")({
-  component: Index,
-});
-
-function Index() {
+export default function Home() {
   return (
     <SmoothScroll>
       <CustomCursor />

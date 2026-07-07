@@ -197,13 +197,7 @@
 }
 
 @utility marquee-mask {
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 12%,
-    black 88%,
-    transparent
-  );
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
 }
 
 @utility link-underline {

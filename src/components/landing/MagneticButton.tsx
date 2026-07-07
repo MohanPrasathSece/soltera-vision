@@ -1,8 +1,4 @@
-import {
-  useRef,
-  type ReactNode,
-  type MouseEvent as ReactMouseEvent,
-} from "react";
+import { useRef, type ReactNode, type MouseEvent as ReactMouseEvent } from "react";
 
 interface MagneticProps {
   children: ReactNode;

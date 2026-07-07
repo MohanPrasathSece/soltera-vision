@@ -5,23 +5,13 @@ import * as THREE from "three";
 
 function ChromeMaterial() {
   return (
-    <meshStandardMaterial
-      color="#e8e8e8"
-      metalness={1}
-      roughness={0.08}
-      envMapIntensity={1.4}
-    />
+    <meshStandardMaterial color="#e8e8e8" metalness={1} roughness={0.08} envMapIntensity={1.4} />
   );
 }
 
 function ObsidianMaterial() {
   return (
-    <meshStandardMaterial
-      color="#0c0c0c"
-      metalness={0.95}
-      roughness={0.18}
-      envMapIntensity={1.1}
-    />
+    <meshStandardMaterial color="#0c0c0c" metalness={0.95} roughness={0.18} envMapIntensity={1.1} />
   );
 }
 
@@ -95,18 +85,8 @@ function SceneGroup() {
     // Buttery camera-drift + mouse parallax
     const targetY = x * 0.28 + Math.sin(state.clock.elapsedTime * 0.12) * 0.06;
     const targetX = -y * 0.18 + Math.cos(state.clock.elapsedTime * 0.1) * 0.04;
-    group.current.rotation.y = THREE.MathUtils.damp(
-      group.current.rotation.y,
-      targetY,
-      2.2,
-      delta,
-    );
-    group.current.rotation.x = THREE.MathUtils.damp(
-      group.current.rotation.x,
-      targetX,
-      2.2,
-      delta,
-    );
+    group.current.rotation.y = THREE.MathUtils.damp(group.current.rotation.y, targetY, 2.2, delta);
+    group.current.rotation.x = THREE.MathUtils.damp(group.current.rotation.x, targetX, 2.2, delta);
   });
 
   return (
