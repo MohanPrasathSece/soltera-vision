@@ -40,7 +40,7 @@ function fieldCls(touched: boolean, error: string, value: string) {
 type Field = "name" | "email";
 
 /* -- Trust Badge ----------------------------------------------- */
-function TrustBadge({ icon: Icon, text, delay }: { icon: React.ElementType; text: string; delay: number }) {
+function TrustBadge({ icon: Icon, text, delay }: { icon: React.ComponentType<{ className?: string }>; text: string; delay: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 12 }}

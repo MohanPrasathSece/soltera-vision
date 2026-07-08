@@ -1,23 +1,9 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  BookOpen,
-  Cpu,
-  Layers,
-  TrendingUp,
-  ShieldAlert,
-  Wallet,
-  HelpCircle,
-  Percent,
-  Activity,
-  LineChart as LucideLineChart,
   Check,
   Loader2,
   ArrowUpRight,
-  ChevronRight,
-  Monitor,
-  CircleDot,
-  Calculator,
 } from "lucide-react";
 import { SmoothScroll } from "@/components/landing/SmoothScroll";
 import { CustomCursor } from "@/components/landing/CustomCursor";
@@ -28,163 +14,18 @@ import { useAuth } from "../App";
 import { toast } from "sonner";
 import { Magnetic } from "@/components/landing/MagneticButton";
 
-// Define the 10 educational sections
-const sections = [
-  {
-    id: "intro",
-    title: "Introduction to Cryptocurrency",
-    icon: BookOpen,
-    tagline: "The Evolution of Digital Scarcity",
-    description:
-      "Discover how cryptographic networks created the first verifiable, peer-to-peer digital currency independent of centralized entities.",
-    points: [
-      "The Genesis: Solving the double-spending problem without trusted intermediaries.",
-      "Decentralization: How node networks secure consensus globally.",
-      "Fiat vs. Crypto: Comparing supply mechanisms, inflation schedules, and custody.",
-      "Key Milestones: From Bitcoin's whitepaper in 2008 to global institutional asset status.",
-    ],
-  },
-  {
-    id: "blockchain",
-    title: "Understanding Blockchain",
-    icon: Layers,
-    tagline: "The Distributed Ledger Technology",
-    description:
-      "A deep dive into block structure, hash functions, and consensus algorithms that guarantee the immutability of digital records.",
-    points: [
-      "Blocks & Chains: How transaction data is grouped, hashed, and linked sequentially.",
-      "Consensus Mechanisms: Exploring Proof of Work (PoW) versus Proof of Stake (PoS).",
-      "Smart Contracts: Programmable, self-executing contracts running on virtual machines.",
-      "Public vs. Private: Comparing permissionless networks with enterprise solutions.",
-    ],
-  },
-  {
-    id: "investing",
-    title: "Digital Asset Investing",
-    icon: TrendingUp,
-    tagline: "Allocation Strategies for Modern Markets",
-    description:
-      "Institutional-grade methodologies for evaluating digital assets, tokenized structures, and emerging web3 networks.",
-    points: [
-      "Fundamental Analysis: On-chain metrics, developer activity, and fee dynamics.",
-      "Custodial Options: Multi-sig structures, institutional custodians, and self-custody.",
-      "Liquid Yield: Understanding staking rewards, liquidity provisioning, and lending.",
-      "Regulatory Compliance: KYC/AML compliance and tax reporting structures.",
-    ],
-  },
-  {
-    id: "trading",
-    title: "Crypto Trading Basics",
-    icon: Activity,
-    tagline: "Order Books, Spreads, and Mechanics",
-    description:
-      "Learn the underlying mechanics of crypto trading: from order execution models to leverage, liquidations, and perpetual swaps.",
-    points: [
-      "Order Book Mechanics: Bids, asks, spreads, market makers, and order routing.",
-      "Order Types: Market, limit, stop-loss, and take-profit structures.",
-      "Leverage & Derivatives: Perpetual futures, margins, and funding rates.",
-      "Volume & Liquidity: Evaluating depth charts and slippage impact.",
-    ],
-  },
-  {
-    id: "ai",
-    title: "AI & Market Analysis",
-    icon: Cpu,
-    tagline: "Algorithmic and Quantitative Trading",
-    description:
-      "How quantitative models and artificial intelligence process vast datasets to execute trades and manage risk in milliseconds.",
-    points: [
-      "Sentiment Mining: AI processing of news, social channels, and institutional filings.",
-      "Arbitrage Bot Logic: Exploiting micro-inefficiencies across decentralized/centralized exchanges.",
-      "Predictive Analytics: Utilizing machine learning algorithms on historical order books.",
-      "Model Safety: Preventing algorithm decay and managing market anomalies.",
-    ],
-  },
-  {
-    id: "diversification",
-    title: "Portfolio Diversification",
-    icon: Percent,
-    tagline: "Structuring Asymmetric Return Profiles",
-    description:
-      "Strategies for building balanced digital asset exposure that capitalizes on growth while mitigating structural market risks.",
-    points: [
-      "Asset Sizing: Dynamic weighting between Layer-1s, DeFi, and infrastructure tokens.",
-      "Correlation Matrix: How crypto assets interact with traditional equities, gold, and bonds.",
-      "Rebalancing Regimes: Time-based vs. threshold-based portfolio rebalancing.",
-      "Asymmetry: Capitalizing on venture-like returns with capped downside risks.",
-    ],
-  },
-  {
-    id: "risk",
-    title: "Risk Management",
-    icon: ShieldAlert,
-    tagline: "Hedging, Drawdowns, and Safeties",
-    description:
-      "The critical discipline of digital wealth conservation: stop-losses, smart contract auditing, and tail-risk hedging.",
-    points: [
-      "Drawdown Control: Hard boundaries to protect capital reserves in volatile drops.",
-      "DeFi Protocol Risk: Audits, compiler bugs, and oracle flash-loan vulnerability checks.",
-      "Counterparty Risk: Evaluating liquidity status of exchanges and custodial institutions.",
-      "Delta Hedging: Using options contracts to offset directional spot exposure.",
-    ],
-  },
-  {
-    id: "trends",
-    title: "Market Trends",
-    icon: LucideLineChart,
-    tagline: "Macro Cycles and On-chain Indicators",
-    description:
-      "Spotting secular shifts through macro liquidity indicators, stablecoin supply ratios, and structural halving mechanics.",
-    points: [
-      "The Halving Cycle: Bitcoin supply contraction mechanics and historical impact.",
-      "On-chain Health: Analyzing active addresses, spent output profit ratio (SOPR), and exchanges flows.",
-      "Stablecoin Velocity: Measuring system-wide liquidity and capital sideline positioning.",
-      "Institutional Flows: Tracking ETF net inflows and venture capital allocations.",
-    ],
-  },
-  {
-    id: "security",
-    title: "Security Best Practices",
-    icon: Wallet,
-    tagline: "Fortifying Your Digital Sovereign Assets",
-    description:
-      "Essential security frameworks designed to shield digital portfolios from phishing, social engineering, and wallet drainage.",
-    points: [
-      "Cold Storage: Utilizing hardware wallets with air-gapped signature methods.",
-      "Seed Phrase Hygiene: Cryptographic backups, offline storage, and metal plate engraving.",
-      "Multi-Signature Setup: Multi-key consensus for executing large transaction volumes.",
-      "Browser Sanitation: Dedicated machines, sandbox extensions, and signature verification.",
-    ],
-  },
-  {
-    id: "faq",
-    title: "Frequently Asked Questions",
-    icon: HelpCircle,
-    tagline: "Direct Answers for Institutional Inquiries",
-    description:
-      "Clarifying structural queries related to liquidity, audit certifications, compliance structures, and client support.",
-    points: [
-      "What is the minimum lock-up period? Revelle provides monthly liquidity windows for most portfolios.",
-      "How is custody audited? Independent third-party security auditors verify custody vaults monthly.",
-      "Are portfolios tax-optimized? Yes, Revelle utilizes tax-loss harvesting mechanisms where legally viable.",
-      "What jurisdictions are supported? Revelle accommodates accredited investors from primary OECD regions.",
-    ],
-  },
+const words = [
+  "ON-CHAIN LIQUIDITY METRICS",
+  "ALGORITHMIC EXECUTION DESK",
+  "QUANTITATIVE MARKET MODELS",
+  "PORTFOLIO DIVERSIFICATION",
+  "SECURE VAULT CUSTODIAL AUDITS",
+  "REAL-TIME RISK MANAGEMENT",
 ];
 
 export default function Education() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState("intro");
-
-  // Interactive Candlestick State
-  const [candleInterval, setCandleInterval] = useState<"1H" | "4H" | "1D">("1D");
-  const [candleTooltip, setCandleTooltip] = useState<string | null>(null);
-
-  // Trading Widget State
-  const [tradeAsset, setTradeAsset] = useState("BTC");
-  const [tradeType, setTradeType] = useState<"BUY" | "SELL">("BUY");
-  const [tradeSize, setTradeSize] = useState("0.1");
-  const [leverage, setLeverage] = useState(10);
+  const [index, setIndex] = useState(0);
 
   // Contact Form State
   const [name, setName] = useState(user?.name || "");
@@ -195,6 +36,14 @@ export default function Education() {
   const [success, setSuccess] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
+  // Cycle through research terms
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % words.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
   // Sync user details if context loads late
   useEffect(() => {
     if (user) {
@@ -203,30 +52,6 @@ export default function Education() {
       if (!phone) setPhone(user.phone || "");
     }
   }, [user]);
-
-  // Generate Candlestick Mock Data based on interval
-  const getCandles = () => {
-    const seed = candleInterval === "1H" ? 1.01 : candleInterval === "4H" ? 1.03 : 1.08;
-    return [
-      { t: "09:00", o: 91200, h: 91800, l: 91000, c: 91650, v: "142 BTC" },
-      { t: "10:00", o: 91650, h: 92400, l: 91500, c: 92100, v: "185 BTC" },
-      { t: "11:00", o: 92100, h: 92250, l: 91800, c: 91950, v: "98 BTC" },
-      { t: "12:00", o: 91950, h: 93100, l: 91700, c: 92850, v: "244 BTC" },
-      { t: "13:00", o: 92850, h: 93500, l: 92600, c: 93400, v: "310 BTC" },
-      { t: "14:00", o: 93400, h: 93600, l: 92900, c: 93150, v: "168 BTC" },
-      { t: "15:00", o: 93150, h: 94500, l: 93050, c: 94380, v: "412 BTC" },
-      { t: "16:00", o: 94380, h: 94900, l: 94100, c: 94750, v: "295 BTC" },
-    ].map((c) => ({
-      ...c,
-      o: Math.round(c.o * seed),
-      h: Math.round(c.h * seed),
-      l: Math.round(c.l * seed),
-      c: Math.round(c.c * seed),
-    }));
-  };
-
-  const currentCandles = getCandles();
-  const activeSection = sections.find((s) => s.id === activeTab) || sections[0];
 
   const handleEnquirySubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -268,15 +93,6 @@ export default function Education() {
     }
   };
 
-  // Asset Price mapping for trading calculations
-  const assetPrices: Record<string, number> = { BTC: 96800, ETH: 3450, SOL: 185 };
-  const currentPrice = assetPrices[tradeAsset];
-  const sizeNum = parseFloat(tradeSize) || 0;
-  const positionValue = sizeNum * currentPrice;
-  const marginRequired = positionValue / leverage;
-  const liqPrice =
-    tradeType === "BUY" ? currentPrice * (1 - 0.9 / leverage) : currentPrice * (1 + 0.9 / leverage);
-
   return (
     <SmoothScroll>
       <CustomCursor />
@@ -298,7 +114,7 @@ export default function Education() {
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
           {/* Header section */}
-          <div className="relative pt-16 pb-12">
+          <div className="relative pt-16 pb-6">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
@@ -313,251 +129,56 @@ export default function Education() {
                 <span className="text-muted-foreground">Market Research.</span>
               </h1>
               <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-muted-foreground">
-                Welcome to Revelle's premium educational portal. Below is your custom institutional
-                sandbox, incorporating blockchain topics, live-simulated order book calculators, and
-                interactive widgets.
+                Our proprietary intelligence framework tracking digital asset velocity, algorithmic execution parameters, and on-chain liquidity indicators.
               </p>
             </motion.div>
           </div>
 
-          {/* Educational Visual Sandbox widgets */}
-          <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr] lg:gap-8 pb-16">
-            {/* Widget 1: Interactive Candlestick Chart */}
+          {/* Minimalist words animation showcase */}
+          <div className="relative flex items-center justify-center h-[350px] w-full rounded-[24px] sm:rounded-[32px] border border-border bg-card overflow-hidden my-8" style={{ boxShadow: "var(--shadow-card)" }}>
+            {/* Rotating grid background */}
             <motion.div
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, delay: 0.1 }}
-              className="relative flex flex-col justify-between overflow-hidden rounded-[24px] sm:rounded-[32px] border border-border bg-card p-4 sm:p-6 md:p-8"
-              style={{ boxShadow: "var(--shadow-card)" }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+              className="absolute size-[480px] opacity-[0.03] border border-dashed border-foreground rounded-full flex items-center justify-center pointer-events-none"
             >
-              <div>
-                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
-                  <div className="flex items-center gap-3">
-                    <span className="flex size-2">
-                      <span className="animate-pulse-ring absolute inline-flex size-3.5 rounded-full bg-accent" />
-                      <span className="relative inline-flex size-2 rounded-full bg-accent" />
-                    </span>
-                    <h3 className="font-mono text-[13px] font-bold uppercase tracking-wider text-foreground">
-                      XBT/USD Live Candlesticks
-                    </h3>
-                  </div>
+              <div className="size-[380px] border border-dashed border-foreground rounded-full" />
+              <div className="size-[280px] border border-dashed border-foreground rounded-full" />
+              <div className="size-[180px] border border-dashed border-foreground rounded-full" />
+              <div className="absolute w-full h-[1px] bg-foreground/50" />
+              <div className="absolute h-full w-[1px] bg-foreground/50" />
+            </motion.div>
 
-                  <div className="flex items-center gap-1.5 rounded-full border border-border p-1 bg-background/50">
-                    {(["1H", "4H", "1D"] as const).map((interval) => (
-                      <button
-                        key={interval}
-                        onClick={() => setCandleInterval(interval)}
-                        className={`rounded-full px-3 py-1 font-mono text-[11px] font-bold transition-all duration-300 ${
-                          candleInterval === interval
-                            ? "bg-accent text-accent-foreground"
-                            : "text-muted-foreground hover:text-foreground"
-                        }`}
-                      >
-                        {interval}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+            {/* Pulsing core glow */}
+            <div className="absolute size-36 rounded-full opacity-[0.08] blur-2xl" style={{ background: "radial-gradient(circle, var(--accent), transparent 70%)" }} />
 
-                {/* Price Display */}
-                <div className="mt-4 flex items-baseline gap-3">
-                  <span className="font-mono text-3xl font-bold text-foreground">
-                    ${currentCandles[currentCandles.length - 1].c.toLocaleString()}
-                  </span>
-                  <span className="font-mono text-xs font-semibold text-accent">
-                    +4.62% (+$
-                    {Math.round(
-                      currentCandles[currentCandles.length - 1].c - currentCandles[0].o,
-                    ).toLocaleString()}
-                    )
-                  </span>
-                </div>
-              </div>
-
-              {/* Candlestick Graphic */}
-              <div className="relative mt-8 h-56 w-full">
-                <svg viewBox="0 0 500 200" className="h-full w-full overflow-visible">
-                  {/* Grid Lines */}
-                  {[40, 80, 120, 160].map((y) => (
-                    <line
-                      key={y}
-                      x1="0"
-                      y1={y}
-                      x2="500"
-                      y2={y}
-                      stroke="var(--color-border)"
-                      strokeWidth="0.75"
-                      strokeDasharray="4 4"
-                    />
-                  ))}
-
-                  {/* Render Candlesticks */}
-                  {currentCandles.map((candle, i) => {
-                    const step = 450 / currentCandles.length;
-                    const x = 30 + i * step + step / 2;
-                    const scaleFactor = 0.015;
-                    const minPrice = 88000;
-
-                    const openY = 200 - (candle.o - minPrice) * scaleFactor;
-                    const closeY = 200 - (candle.c - minPrice) * scaleFactor;
-                    const highY = 200 - (candle.h - minPrice) * scaleFactor;
-                    const lowY = 200 - (candle.l - minPrice) * scaleFactor;
-
-                    const isGreen = candle.c >= candle.o;
-                    const strokeColor = isGreen ? "#D7FF4B" : "#FF5E5E";
-                    const fillColor = isGreen
-                      ? "rgba(215, 255, 75, 0.45)"
-                      : "rgba(255, 94, 94, 0.45)";
-
-                    return (
-                      <g
-                        key={i}
-                        className="cursor-pointer group/candle"
-                        onMouseEnter={() =>
-                          setCandleTooltip(
-                            `Time: ${candle.t} | O: $${candle.o.toLocaleString()} | C: $${candle.c.toLocaleString()} | Vol: ${candle.v}`,
-                          )
-                        }
-                        onMouseLeave={() => setCandleTooltip(null)}
-                        onClick={() => {
-                          const tooltipText = `Time: ${candle.t} | O: $${candle.o.toLocaleString()} | C: $${candle.c.toLocaleString()} | Vol: ${candle.v}`;
-                          setCandleTooltip(candleTooltip === tooltipText ? null : tooltipText);
-                        }}
-                      >
-                        {/* Shadow Wick line */}
-                        <line
-                          x1={x}
-                          y1={highY}
-                          x2={x}
-                          y2={lowY}
-                          stroke={strokeColor}
-                          strokeWidth="1.5"
-                        />
-                        {/* Candle Body */}
-                        <rect
-                          x={x - 8}
-                          y={Math.min(openY, closeY)}
-                          width="16"
-                          height={Math.max(2, Math.abs(closeY - openY))}
-                          fill={fillColor}
-                          stroke={strokeColor}
-                          strokeWidth="1.5"
-                          rx="2"
-                        />
-                      </g>
-                    );
-                  })}
-                </svg>
-
-                {/* Floating tooltip */}
-                <AnimatePresence>
-                  {candleTooltip && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="absolute bottom-2 left-4 rounded-xl border border-border bg-background/90 px-4 py-2 font-mono text-[11px] text-foreground shadow-lg backdrop-blur-sm"
-                    >
-                      {candleTooltip}
-                    </motion.div>
-                  )}
+            {/* Content text */}
+            <div className="relative z-10 flex flex-col items-center justify-center px-6">
+              <span className="font-mono text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em] mb-4">
+                Active Intelligence Module
+              </span>
+              <div className="h-[90px] flex items-center justify-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 15, filter: "blur(6px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: -15, filter: "blur(6px)" }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    className="text-center font-display text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-accent"
+                  >
+                    {words[index]}
+                  </motion.div>
                 </AnimatePresence>
               </div>
-            </motion.div>
-
-            {/* Simplified Risk Advisory Card replacing Leverage Simulator */}
-            <motion.div
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, delay: 0.18 }}
-              className="relative flex flex-col justify-between overflow-hidden rounded-[24px] sm:rounded-[32px] border border-border bg-card p-6 sm:p-8"
-              style={{ boxShadow: "var(--shadow-card)" }}
-            >
-              <div>
-                <span className="font-mono text-[10px] font-bold text-accent uppercase tracking-wider">Risk Management Advisory</span>
-                <h3 className="text-xl font-bold tracking-tight text-foreground mt-3 mb-4">Leverage &amp; Capital Hedging</h3>
-                <p className="text-[14px] leading-relaxed text-muted-foreground">
-                  Leverage allows institutional accounts to expand target market exposure. While it acts as a mechanism to amplify positive compounding yields, it is highly sensitive to rapid downside spikes.
-                </p>
-                <p className="text-[14px] leading-relaxed text-muted-foreground mt-4">
-                  Revelle Partners enforces strict multi-signature collateralized thresholds and algorithmic hedge protocols to protect your core digital assets from sudden liquidations, ensuring sustained risk-adjusted growth.
-                </p>
-              </div>
-              <div className="mt-8 border-t border-border/40 pt-4 text-[11px] text-muted-foreground/60 font-mono">
-                Leverage Exposure Limits: Managed (1x to 3x max)
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Mac-Style browser tabs section */}
-          <div
-            className="rounded-[24px] sm:rounded-[32px] border border-border bg-card overflow-hidden shadow-2xl"
-            style={{ boxShadow: "var(--shadow-card)" }}
-          >
-            {/* Mac browser window header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-background/40 border-b border-border">
-              <div className="flex items-center gap-2">
-                <span className="size-3 rounded-full bg-[#FF5E5E]" />
-                <span className="size-3 rounded-full bg-[#FFBB3F]" />
-                <span className="size-3 rounded-full bg-[#D7FF4B]" />
-              </div>
-              <div className="flex items-center gap-1.5 rounded-lg border border-border/80 bg-background/40 px-4 py-1.5 text-xs text-muted-foreground font-mono">
-                <Monitor className="size-3" />
-                <span>soltera://research-desk</span>
-              </div>
-              <div className="w-12" /> {/* Spacer */}
-            </div>
-
-            {/* Main window content (Single, simplified description) */}
-            <div className="p-6 sm:p-8 md:p-12 bg-card-glow relative">
-              <div className="max-w-3xl">
-                <span className="font-mono text-xs font-bold text-accent uppercase tracking-widest">
-                  Market Intelligence Brief
-                </span>
-                <h2 className="text-display mt-3 text-3xl text-foreground sm:text-4xl">
-                  Digital Asset Portfolio Research
-                </h2>
-                <p className="mt-6 text-[15px] leading-relaxed text-muted-foreground">
-                  Our research framework covers the fundamental evolution of decentralized ledger networks, automated order book execution algorithms, and risk containment.
-                </p>
-
-                <div className="mt-8 border-t border-border/80 pt-8">
-                  <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-foreground">
-                    Core Intelligence Pillars:
-                  </h4>
-                  <ul className="mt-4 space-y-4">
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
-                        <Check className="size-3" />
-                      </span>
-                      <span className="text-[14.5px] leading-relaxed text-muted-foreground">
-                        <strong>On-chain Analysis:</strong> Evaluating fee dynamics, developer momentum, and liquidity velocity.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
-                        <Check className="size-3" />
-                      </span>
-                      <span className="text-[14.5px] leading-relaxed text-muted-foreground">
-                        <strong>Algorithmic Execution:</strong> Utilizing smart routing to mitigate transaction slippage.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
-                        <Check className="size-3" />
-                      </span>
-                      <span className="text-[14.5px] leading-relaxed text-muted-foreground">
-                        <strong>Custodial Audits:</strong> Monthly multi-sig vault checks verified by independent auditors.
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              <p className="mt-4 max-w-md text-center text-[10px] font-mono text-muted-foreground/60 leading-relaxed uppercase tracking-wider">
+                Continuous updates from Revelle capital desks.
+              </p>
             </div>
           </div>
 
-          {/* Enquiry form Section (Logged in Page Contact) */}
-          <div className="mt-24 max-w-4xl mx-auto">
+          {/* Enquiry form Section */}
+          <div className="mt-16 max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
