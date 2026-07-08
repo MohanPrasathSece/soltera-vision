@@ -256,7 +256,8 @@ export function AuthModals() {
             </button>
 
             {/* Logo Header */}
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2.5 mb-4">
+              <img src="/logo.png" alt="Revelle Logo" className="h-5.5 w-auto object-contain" />
               <span className="font-display text-[15px] font-semibold tracking-tight text-foreground">Revelle Vision</span>
             </div>
 

@@ -1,4 +1,4 @@
-import { put, list, get } from "@vercel/blob";
+import { put, list } from "@vercel/blob";
 import fs from "fs";
 import path from "path";
 
@@ -44,12 +44,12 @@ export async function getUsers(): Promise<User[]> {
       return localUsersCache;
     }
 
-    const token = process.env.BLOB_READ_WRITE_TOKEN;
-    const response = await get(blobUrl, { token });
-    if (response.body) {
-      return (await new Response(response.body).json()) as User[];
+    const response = await fetch(blobUrl);
+    if (!response.ok) {
+      console.warn(`Fetch users from Blob failed with status ${response.status}. Falling back to local cache.`);
+      return localUsersCache;
     }
-    return localUsersCache;
+    return (await response.json()) as User[];
   } catch (e) {
     console.error("Failed to fetch users from Vercel Blob, falling back to local cache:", e);
     return localUsersCache;

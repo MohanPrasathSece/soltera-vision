@@ -49,9 +49,9 @@ export function Navbar() {
         >
           <a
             href="/"
-            className="text-sm font-extrabold uppercase tracking-[0.28em] text-foreground"
+            className="flex items-center"
           >
-            Revelle
+            <img src="/logo.png" alt="Revelle" className="h-6 w-auto object-contain" />
           </a>
 
           <ul className="hidden items-center gap-8 md:flex">
@@ -144,8 +144,9 @@ export function Navbar() {
                   <X className="size-5" />
                 </button>
 
-                <div className="flex items-center gap-2 mb-6">
-                  <span className="font-display text-[15px] font-semibold tracking-tight text-foreground">Menu</span>
+                <div className="flex items-center gap-2.5 mb-6">
+                  <img src="/logo.png" alt="Revelle Logo" className="h-5.5 w-auto object-contain" />
+                  <span className="font-display text-[14px] font-semibold tracking-tight text-foreground/80">Menu</span>
                 </div>
 
                 <ul className="space-y-1">

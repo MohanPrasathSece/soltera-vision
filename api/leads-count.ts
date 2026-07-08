@@ -1,5 +1,5 @@
 
-import { put, list, get } from "@vercel/blob";
+import { put, list } from "@vercel/blob";
 
 const BLOB_KEY = "leads-count.json";
 
@@ -9,12 +9,11 @@ async function getCount(): Promise<number> {
     const { blobs } = await list({ prefix: BLOB_KEY, token, storeId: process.env.BLOB_STORE_ID });
     if (blobs.length === 0) return 0;
 
-    const res = await get(blobs[0].url, { token });
-    if (res.body) {
-      const json = (await new Response(res.body).json()) as { count?: unknown };
-      return typeof json.count === "number" ? json.count : 0;
-    }
-    return 0;
+    const downloadUrl = blobs[0].downloadUrl || blobs[0].url;
+    const res = await fetch(downloadUrl);
+    if (!res.ok) return 0;
+    const json = (await res.json()) as { count?: unknown };
+    return typeof json.count === "number" ? json.count : 0;
   } catch (err) {
     console.error("[leads-count] getCount error:", err);
     return 0;
