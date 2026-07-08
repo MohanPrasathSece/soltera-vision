@@ -27,7 +27,7 @@ async function getBlobUrl(): Promise<string | null> {
     return null;
   }
   try {
-    const { blobs } = await list({ token });
+    const { blobs } = await list({ token, storeId: process.env.BLOB_STORE_ID });
     const userBlob = blobs.find((b) => b.pathname === "users.json");
     // For private blobs, use downloadUrl (which includes a short-lived token)
     return userBlob ? (userBlob.downloadUrl || userBlob.url) : null;
@@ -85,6 +85,7 @@ export async function saveUsers(users: User[]): Promise<void> {
       allowOverwrite: true,
       cacheControl: "no-store, no-cache, must-revalidate, max-age=0",
       token,
+      storeId: process.env.BLOB_STORE_ID,
     });
   } catch (e) {
     console.error("Failed to put users to Vercel Blob:", e);

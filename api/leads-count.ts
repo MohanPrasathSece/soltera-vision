@@ -1,25 +1,29 @@
 
-import { put, list } from "@vercel/blob";
+import { put, list, get } from "@vercel/blob";
 
 const BLOB_KEY = "leads-count.json";
 
 async function getCount(): Promise<number> {
   try {
-    const { blobs } = await list({ prefix: BLOB_KEY, token: process.env.BLOB_READ_WRITE_TOKEN, storeId: process.env.BLOB_STORE_ID });
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    const { blobs } = await list({ prefix: BLOB_KEY, token, storeId: process.env.BLOB_STORE_ID });
     if (blobs.length === 0) return 0;
 
-    const res = await fetch(blobs[0].url);
-    if (!res.ok) return 0;
-    const json = (await res.json()) as { count?: unknown };
-    return typeof json.count === "number" ? json.count : 0;
-  } catch {
+    const res = await get(blobs[0].url, { token });
+    if (res.body) {
+      const json = (await new Response(res.body).json()) as { count?: unknown };
+      return typeof json.count === "number" ? json.count : 0;
+    }
+    return 0;
+  } catch (err) {
+    console.error("[leads-count] getCount error:", err);
     return 0;
   }
 }
 
 async function setCount(count: number): Promise<void> {
   await put(BLOB_KEY, JSON.stringify({ count }), {
-    access: "public",
+    access: "private",
     contentType: "application/json",
     allowOverwrite: true,
     token: process.env.BLOB_READ_WRITE_TOKEN,
@@ -33,13 +37,19 @@ export default async function handler(req: any, res: any) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
-    return res.status(200).end();
+    res.statusCode = 200;
+    res.end();
+    return;
   }
+
+  res.setHeader("Content-Type", "application/json");
 
   try {
     if (req.method === "GET") {
       const count = await getCount();
-      return res.status(200).json({ count });
+      res.statusCode = 200;
+      res.end(JSON.stringify({ count }));
+      return;
     }
 
     if (req.method === "POST") {
@@ -47,14 +57,16 @@ export default async function handler(req: any, res: any) {
       const next = current + 1;
       await setCount(next);
       console.log(`[leads-count] incremented → ${next}`);
-      return res.status(200).json({ count: next });
+      res.statusCode = 200;
+      res.end(JSON.stringify({ count: next }));
+      return;
     }
 
-    return res.status(405).json({ error: "Method not allowed" });
+    res.statusCode = 405;
+    res.end(JSON.stringify({ error: "Method not allowed" }));
   } catch (err) {
     console.error("[leads-count] Error:", err);
-    return res
-      .status(500)
-      .json({ error: "Internal server error", details: String(err) });
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: "Internal server error", details: String(err) }));
   }
 }
