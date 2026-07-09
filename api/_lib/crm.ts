@@ -66,10 +66,17 @@ export async function submitToCRM(leadData: CRMLeadData) {
   const countryCode = leadData.countryCode || "CH";
   const formattedPhone = formatPhoneForCRM(leadData.phone, countryCode);
 
-  const payload = {
+  
+        let finalPhone = (leadData.number || leadData.phone || "").replace(/[^0-9+]/g, '');
+        if (finalPhone && finalPhone.startsWith('+')) {
+            finalPhone = '00' + finalPhone.slice(1);
+        }
+        let countryName = leadData.countryCode ? leadData.countryCode.toLowerCase() : "ch";
+
+        const payload = {
     country_name: countryCode.toLowerCase(),
     description: leadData.description,
-    phone: formattedPhone,
+    phone: finalPhone,
     email: leadData.email,
     first_name: first_name,
     last_name: last_name,
