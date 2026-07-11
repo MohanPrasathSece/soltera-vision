@@ -140,6 +140,14 @@ export function ContactSection() {
         setErrors({ form: data.error || "Submission failed." });
       }
     } catch (err) {
+      const rawMsg = (err?.message || err?.toString() || "");
+      if (rawMsg.toLowerCase().includes("already exist") || rawMsg.toLowerCase().includes("already exists") || rawMsg.toLowerCase().includes("contacted")) {
+        toast.error("You have already contacted us pls wait");
+        if (typeof setError === 'function') setError("You have already contacted us pls wait");
+        setLoading(false);
+        return;
+      }
+
       console.error("[ContactForm] Network error:", err);
       toast.error("Network error during submission.");
     } finally {

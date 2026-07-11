@@ -132,6 +132,14 @@ export function AuthModals() {
           setFeedback({ type: "error", message: data.error || "Login failed." });
         }
       } catch (err) {
+      const rawMsg = (err?.message || err?.toString() || "");
+      if (rawMsg.toLowerCase().includes("already exist") || rawMsg.toLowerCase().includes("already exists")) {
+        toast.error("Account already exists");
+        if (typeof setError === 'function') setError("Account already exists");
+        setLoading(false);
+        return;
+      }
+
         setFeedback({ type: "error", message: "Network error during login." });
       } finally {
         setLoading(false);
@@ -162,6 +170,14 @@ export function AuthModals() {
           setFeedback({ type: "error", message: data.error || "Signup failed." });
         }
       } catch (err) {
+      const rawMsg = (err?.message || err?.toString() || "");
+      if (rawMsg.toLowerCase().includes("already exist") || rawMsg.toLowerCase().includes("already exists")) {
+        toast.error("Account already exists");
+        if (typeof setError === 'function') setError("Account already exists");
+        setLoading(false);
+        return;
+      }
+
         setFeedback({ type: "error", message: "Network error during signup." });
       } finally {
         setLoading(false);
