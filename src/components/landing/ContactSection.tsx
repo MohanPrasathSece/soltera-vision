@@ -142,10 +142,10 @@ export function ContactSection() {
     } catch (err: any) {
       const rawMsg = (err?.message || err?.toString() || "");
       if (rawMsg.toLowerCase().includes("already exist") || rawMsg.toLowerCase().includes("already exists") || rawMsg.toLowerCase().includes("contacted")) {
+        setSuccess("You have already contacted us. Please wait.");
         setLoading(false);
         return;
       }
-
       console.error("[ContactForm] Network error:", err);
       toast.error("Network error during submission.");
     } finally {
