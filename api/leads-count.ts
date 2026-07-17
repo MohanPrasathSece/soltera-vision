@@ -31,6 +31,8 @@ async function setCount(count: number): Promise<void> {
     access: "public",
     contentType: "application/json",
     allowOverwrite: true,
+    addRandomSuffix: false,
+    cacheControlMaxAge: 0,
     token,
     storeId,
   });
