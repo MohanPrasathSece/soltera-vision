@@ -68,6 +68,7 @@ export const COUNTRIES: Country[] = [
     regex: /^\+?[1-9]\d{6,14}$/,
     errorMsg: "Please enter a valid phone number with dial code (7-15 digits).",
   },
+  { code: "GBR", name: "Great Britain", dialCode: "+44", flag: "🇬🇧", placeholder: "7700 900077", regex: /^\+447\d{9}$/, errorMsg: "UK mobile number must be 10 digits." },
 ];
 
 export const getCountry = (code: string): Country =>
